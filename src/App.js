@@ -20,6 +20,7 @@ function App() {
   const [enteredText, setEnteredText] = useState('')
   const [name, setName] = useState('')
   const [userIp, setUserIp] = useState('')
+  const [userId, setUserId] = useState('')
   const [userCount, setUserCount] = useState(0)
   const [isLiveChatShown, setIsLiveChatShown] = useState(false)
   const msgContainerRef = useRef()
@@ -47,7 +48,8 @@ function App() {
       type: 'add-msg',
       text: enteredText,
       displayName: name || 'John Doe',
-      userIp
+      userIp,
+      userId
     }
     console.log('data being sent', data)
     setEnteredText('')
@@ -82,6 +84,15 @@ function App() {
       localStorage.setItem('community-live-center-name', name);
       setName(name)
     }
+
+    let userId = localStorage.getItem('community-live-center-userId');
+    if (!userId) {
+      userId = getRandomCharacters(15);
+      localStorage.setItem('community-live-center-userId', userId);
+      setUserId(userId)
+    }
+
+    // ip stopped working
     fetch('https://geolocation-db.com/json/')
       .then(response => response.json())
       .then(data => {
@@ -111,7 +122,7 @@ function App() {
           break;
         }
         case 'add-failed': {
-          alert('failed to send message due to ', parsedData.reason)
+          alert('Cannot send msg: ' + parsedData.reason)
           break
         }
         default: {
@@ -148,10 +159,10 @@ function App() {
                   </div>
                   <ul ref={msgContainerRef} className='messages-container'>
                     {
-                      messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
-                        <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
+                      messages?.map(({text, displayName, createdAt, userId: msguserId}) => (
+                        <li key={displayName} className={`message-container ${msguserId === userId ? 'you' : 'others'}`}>
                           <div className='message-wrapper'>
-                            <span className='avatar'>{msgUserIp === userIp ? 'ME' : displayName?.substr(0, 2)}</span>
+                            <span className='avatar'>{msguserId === userId ? 'ME' : displayName?.substr(0, 2)}</span>
                             <span className='text'>{text}</span>
                             <span className='timestamp'>{new Date(createdAt).toLocaleString()}</span>
                           </div>

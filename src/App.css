@@ -25,10 +25,15 @@
 }
 
 .user-count {
+  position: absolute;
+  top: 0;
   text-align: left;
   font-size: 10px;
   font-weight: bold;
   padding: 5px;
+  height: 20px;
+  border-bottom: 1px solid gray;
+  width: 100%;
 }
 
 .user-count .status-icon {
@@ -50,11 +55,12 @@
   padding: 10px;
   box-shadow: 0 8px 12px rgb(9 30 66 / 15%), 0 0 1px rgb(9 30 66 / 31%);
   min-height: 100px;
-  max-height: 350px;
+  max-height: 375px;
   overflow-y: auto;
   overflow-x: hidden;
   margin: 0;
   background-color: white;
+  padding-top: 25px;
 }
 
 .messages-container .message-container {
@@ -80,6 +86,7 @@
 
 .messages-container .message-container.you .message-wrapper {
   padding-right: 50px;
+  text-align: right;
 }
 
 .messages-container .message-container .avatar {
