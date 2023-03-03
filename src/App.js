@@ -44,6 +44,7 @@ function App() {
   }
 
   const handleMessageSend = () => {
+    if (!(enteredText?.trim())) return
     const data = {
       type: 'add-msg',
       text: enteredText,
@@ -160,7 +161,7 @@ function App() {
                   <ul ref={msgContainerRef} className='messages-container'>
                     {
                       messages?.map(({text, displayName, createdAt, userId: msguserId}) => (
-                        <li key={displayName} className={`message-container ${msguserId === userId ? 'you' : 'others'}`}>
+                        <li key={msguserId} className={`message-container ${msguserId === userId ? 'you' : 'others'}`}>
                           <div className='message-wrapper'>
                             <span className='avatar'>{msguserId === userId ? 'ME' : displayName?.substr(0, 2)}</span>
                             <span className='text'>{text}</span>

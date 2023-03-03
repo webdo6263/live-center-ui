@@ -129,6 +129,8 @@
 
 .controls-container {
   position: relative;
+  width: 300px;
+  margin-left: -1px;
 }
 
 .controls-container .input-text {
