@@ -6,6 +6,43 @@
   text-align: center;
   min-width: 300px;
   margin: 0 auto;
+  position: relative;
+}
+
+.ask-live-button {
+  position: absolute;
+  right: 15px;
+  top: 0;
+  height: 48px;
+  width: 100px;
+}
+
+.community-live-center {
+  position: absolute;
+  top: 50px;
+  right: 15px;
+  width: 300px;
+}
+
+.user-count {
+  text-align: left;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.user-count .status-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background: gray;
+  margin-right: 5px;
+  vertical-align: bottom;
+}
+
+.user-count.available .status-icon {
+  background: green;
 }
 
 .messages-container {
@@ -16,6 +53,8 @@
   max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
+  margin: 0;
+  background-color: white;
 }
 
 .messages-container .message-container {
@@ -100,18 +139,6 @@
   width: 100px;
   position: absolute;
   right: 0;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  cursor: pointer;
-}
-
-.controls-container .send-btn:hover {
-  background-color: #0069d9;
-}
-
-.controls-container .send-btn:active {
-  background-color: #0062cc;
 }
 
 .notification-container {
@@ -122,4 +149,24 @@
 
 .notification-container .info {
   color: #17a2b8;
+}
+
+.communtiy-atlassian-iframe {
+  width: 100%;
+  min-height: 800px;
+}
+
+button {
+  color: #fff;
+  background-color: #172b4d;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0069d9;
+}
+
+button:active {
+  background-color: #0062cc;
 }

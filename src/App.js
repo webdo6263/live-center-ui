@@ -8,13 +8,24 @@ function App() {
   const [enteredText, setEnteredText] = useState('')
   const [name, setName] = useState('John Doe')
   const [userIp, setUserIp] = useState('')
+  const [userCount, setUserCount] = useState(0)
+  const [isLiveChatShown, setIsLiveChatShown] = useState(false)
   const msgContainerRef = useRef()
+  const [isIframeLoaded, setIsFrameLoaded] = useState(false)
+
+  const handleIframeLoad = () => {
+    setIsFrameLoaded(true)
+  }
 
   const handleEnteredText = (e) => {
     setEnteredText(e.target.value)
   }
   const handleSubmit = event => {
     event.preventDefault(); 
+  }
+
+  const handleAskLive = () => {
+    setIsLiveChatShown(!isLiveChatShown)
   }
 
   const handleMessageSend = () => {
@@ -62,6 +73,10 @@ function App() {
             setMessages(parsedData.messages)
             break;
         }
+        case 'active-user-count': {
+          setUserCount(+parsedData.activeUserCount)
+          break;
+        }
         case 'add-failed': {
           alert('failed to send message due to ', parsedData.reason)
           break
@@ -80,33 +95,58 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Connect</h1>
-      <ul ref={msgContainerRef} className='messages-container'>
-        {
-          messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
-            <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
-              <div className='message-wrapper'>
-                <span className='avatar'>{displayName?.substr(0, 2)}</span>
-                <span className='text'>{text}</span>
-                <span className='timestamp'>{new Date(createdAt).toLocaleString()}</span>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-      <div className='controls-container'>
-        <form onSubmit={handleSubmit}>
-          <input className='input-text' type='text' value={enteredText} onChange={handleEnteredText} />
-          <button className='send-btn' type="submit" onClick={handleMessageSend}>Send</button>
-        </form>
-      </div>
-      <div className='notification-container'>
-        {
-          messages?.length ? null : (
-            <span className='info'>No messages to show. Start a conversation</span>
-          )
-        }
-      </div>
+      <iframe 
+        className='communtiy-atlassian-iframe' 
+        seamless="seamless" 
+        title="main-community" 
+        src="https://community.atlassian.com/" 
+        frameborder="0"
+        onLoad={handleIframeLoad}
+      ></iframe>
+      {
+        isIframeLoaded ? (
+          <div>
+            <button className='ask-live-button' onClick={handleAskLive}>Ask Live</button>
+            {
+              isLiveChatShown ? (
+                <div className='community-live-center'>
+                  <div className={`user-count ${userCount ? 'available': 'not-available'}`}>
+                    <span className='status-icon'></span>
+                    {userCount} user(/s) online
+                  </div>
+                  <ul ref={msgContainerRef} className='messages-container'>
+                    {
+                      messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
+                        <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
+                          <div className='message-wrapper'>
+                            <span className='avatar'>{displayName?.substr(0, 2)}</span>
+                            <span className='text'>{text}</span>
+                            <span className='timestamp'>{new Date(createdAt).toLocaleString()}</span>
+                          </div>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                  <div className='controls-container'>
+                    <form onSubmit={handleSubmit}>
+                      <input className='input-text' type='text' value={enteredText} onChange={handleEnteredText} />
+                      <button className='send-btn' type="submit" onClick={handleMessageSend}>Send</button>
+                    </form>
+                  </div>
+                  <div className='notification-container'>
+                    {
+                      messages?.length ? null : (
+                        <span className='info'>No messages to show. Start a conversation</span>
+                      )
+                    }
+                  </div>
+                </div>
+              ) : null
+            }
+          </div>
+        ) : null
+      }
+      
     </div>
   );
 }
