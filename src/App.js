@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const CHAT_URL = `ws://${window.location.hostname}:3030`
 const ws = new WebSocket(CHAT_URL)
@@ -7,9 +7,13 @@ function App() {
   const [messages, setMessages] = useState([])
   const [enteredText, setEnteredText] = useState('')
   const [userIp, setUserIp] = useState('')
+  const msgContainerRef = useRef()
 
   const handleEnteredText = (e) => {
     setEnteredText(e.target.value)
+  }
+  const handleSubmit = event => {
+    event.preventDefault(); 
   }
 
   const handleMessageSend = () => {
@@ -20,8 +24,13 @@ function App() {
       userIp
     }
     console.log('data being sent', data)
+    setEnteredText('')
     ws.send(JSON.stringify(data))
   }
+
+  useEffect(() => {
+    msgContainerRef?.current?.lastChild?.scrollIntoView()
+  }, [messages]);
 
   useEffect(()=> {
     fetch('https://geolocation-db.com/json/')
@@ -62,15 +71,14 @@ function App() {
     ws.onclose = () => {
       console.log('disconnected')
     }
-    
   }, [])
-  ////{`${text} from ${displayName} at ${createdAt}`}
+
   return (
     <div className="App">
       <h1>Connect</h1>
-      <ul className='messages-container'>
+      <ul ref={msgContainerRef} className='messages-container'>
         {
-          messages.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
+          messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
             <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
               <div className='message-wrapper'>
                 <span className='avatar'>{displayName.substr(0, 2)}</span>
@@ -82,9 +90,17 @@ function App() {
         }
       </ul>
       <div className='controls-container'>
-        <input type='text' value={enteredText} onChange={handleEnteredText} />
-        <button onClick={handleMessageSend}>Send</button>
-
+        <form onSubmit={handleSubmit}>
+          <input className='input-text' type='text' value={enteredText} onChange={handleEnteredText} />
+          <button className='send-btn' type="submit" onClick={handleMessageSend}>Send</button>
+        </form>
+      </div>
+      <div className='notification-container'>
+        {
+          messages?.length ? null : (
+            <span className='info'>No messages to show. Start a conversation</span>
+          )
+        }
       </div>
     </div>
   );
