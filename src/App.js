@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 
-const CHAT_URL = 'ws://localhost:3030'
+const CHAT_URL = `ws://${window.location.hostname}:3030`
 const ws = new WebSocket(CHAT_URL)
 function App() {
   const [messages, setMessages] = useState([])
