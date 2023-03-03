@@ -79,16 +79,15 @@ function App() {
   }, [messages]);
 
   useEffect(()=> {
-    let name = localStorage.getItem('community-live-center-name');
-    if (!name) {
-      name = getRandomCharacters(2);
+   if (!name) {
+      const name = getRandomCharacters(2);
       localStorage.setItem('community-live-center-name', name);
       setName(name)
     }
 
-    let userId = localStorage.getItem('community-live-center-userId');
+    
     if (!userId) {
-      userId = getRandomCharacters(15);
+      const userId = getRandomCharacters(15);
       localStorage.setItem('community-live-center-userId', userId);
       setUserId(userId)
     }
