@@ -22,6 +22,7 @@
   top: 50px;
   right: 15px;
   width: 300px;
+  background: rgba(255, 255, 255, 1);
 }
 
 .user-count {
