@@ -18,7 +18,7 @@ const ws = new WebSocket(CHAT_URL)
 function App() {
   const [messages, setMessages] = useState([])
   const [enteredText, setEnteredText] = useState('')
-  const [name, setName] = useState('John Doe')
+  const [name, setName] = useState('')
   const [userIp, setUserIp] = useState('')
   const [userCount, setUserCount] = useState(0)
   const [isLiveChatShown, setIsLiveChatShown] = useState(false)
@@ -52,6 +52,23 @@ function App() {
     console.log('data being sent', data)
     setEnteredText('')
     ws.send(JSON.stringify(data))
+    /*fetch('https://plino.herokuapp.com/api/v1/classify/', {
+      method: "POST",
+      mode: 'no-cors',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        emai_text: enteredText 
+      })
+    })
+      .then((response) => {
+        console.log('spam checkkkkk', response)
+        
+      })
+      .catch(err => {
+        alert('Stop Spamming Spammer!!!!')
+      })*/
   }
 
   useEffect(() => {
