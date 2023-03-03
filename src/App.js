@@ -6,6 +6,7 @@ const ws = new WebSocket(CHAT_URL)
 function App() {
   const [messages, setMessages] = useState([])
   const [enteredText, setEnteredText] = useState('')
+  const [name, setName] = useState('John Doe')
   const [userIp, setUserIp] = useState('')
   const msgContainerRef = useRef()
 
@@ -20,7 +21,7 @@ function App() {
     const data = {
       type: 'add-msg',
       text: enteredText,
-      displayName: 'myself' + Date.now(),
+      displayName: name || 'John Doe',
       userIp
     }
     console.log('data being sent', data)
@@ -39,6 +40,10 @@ function App() {
         console.log('setting user ip', data.IPv4)
         setUserIp(data.IPv4)
       })
+
+    const queryParams = new URLSearchParams(window.location.search)
+    const name = queryParams.get('name')
+    if (name) setName(name)
       
     ws.onerror = error => {
       console.log(`WebSocket error: ${error}`)
@@ -81,7 +86,7 @@ function App() {
           messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
             <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
               <div className='message-wrapper'>
-                <span className='avatar'>{displayName.substr(0, 2)}</span>
+                <span className='avatar'>{displayName?.substr(0, 2)}</span>
                 <span className='text'>{text}</span>
                 <span className='timestamp'>{new Date(createdAt).toLocaleString()}</span>
               </div>

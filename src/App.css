@@ -30,20 +30,22 @@
 .messages-container .message-container .message-wrapper {
   text-align: left;
   padding: 10px;
-  padding-left: 50px;
   min-height: 40px;
   position: relative;
   min-width: 150px;
 }
 
-.messages-container .message-container .you {
-  text-align: right;
+.messages-container .message-container.others .message-wrapper {
+  padding-left: 50px;
+}
+
+.messages-container .message-container.you .message-wrapper {
+  padding-right: 50px;
 }
 
 .messages-container .message-container .avatar {
   text-transform: uppercase;
   padding: 5px;
-  border: 1px solid black;
   border-radius: 100%;
   height: 40px;
   width: 40px;
@@ -51,6 +53,16 @@
   line-height: 30px;
   position: absolute;
   top: 0;
+  background: gray;
+  color: white;
+}
+
+.messages-container .message-container.you .avatar {
+  background: green;
+  right: 0;
+}
+
+.messages-container .message-container.others .avatar {
   left: 0;
 }
 
@@ -59,7 +71,14 @@
   position: absolute;
   bottom: 0;
   white-space: nowrap;
+}
+
+.messages-container .message-container.others .timestamp {
   left: 50px;
+}
+
+.messages-container .message-container.you .timestamp {
+  right: 50px;
 }
 
 .controls-container {
