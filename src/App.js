@@ -1,6 +1,18 @@
 import './App.css';
 import { useEffect, useState, useRef } from 'react';
 
+const getRandomCharacterCode = () => {
+  return 'a'.charCodeAt(0) + Math.floor((Math.random() * 100) % 26)
+}
+
+const getRandomCharacters = (charCount) => {
+  let randomChars = []
+  while(charCount--) {
+    randomChars.push(getRandomCharacterCode())
+  }
+  return String.fromCharCode(...randomChars)
+}
+
 const CHAT_URL = `ws://${window.location.hostname}:3030`
 const ws = new WebSocket(CHAT_URL)
 function App() {
@@ -11,9 +23,11 @@ function App() {
   const [userCount, setUserCount] = useState(0)
   const [isLiveChatShown, setIsLiveChatShown] = useState(false)
   const msgContainerRef = useRef()
+  //const iframeContainerRef = useRef()
   const [isIframeLoaded, setIsFrameLoaded] = useState(false)
 
   const handleIframeLoad = () => {
+    //console.log(iframeContainerRef.current.contentWindow.LITHIUM.CommunityJsonObject.User)
     setIsFrameLoaded(true)
   }
 
@@ -45,16 +59,18 @@ function App() {
   }, [messages]);
 
   useEffect(()=> {
+    let name = localStorage.getItem('community-live-center-name');
+    if (!name) {
+      name = getRandomCharacters(2);
+      localStorage.setItem('community-live-center-name', name);
+      setName(name)
+    }
     fetch('https://geolocation-db.com/json/')
       .then(response => response.json())
       .then(data => {
         console.log('setting user ip', data.IPv4)
         setUserIp(data.IPv4)
       })
-
-    const queryParams = new URLSearchParams(window.location.search)
-    const name = queryParams.get('name')
-    if (name) setName(name)
       
     ws.onerror = error => {
       console.log(`WebSocket error: ${error}`)
@@ -100,7 +116,6 @@ function App() {
         seamless="seamless" 
         title="main-community" 
         src="https://community.atlassian.com/" 
-        frameborder="0"
         onLoad={handleIframeLoad}
       ></iframe>
       {
@@ -119,7 +134,7 @@ function App() {
                       messages?.map(({text, displayName, createdAt, userIp: msgUserIp}) => (
                         <li key={displayName} className={`message-container ${msgUserIp === userIp ? 'you' : 'others'}`}>
                           <div className='message-wrapper'>
-                            <span className='avatar'>{displayName?.substr(0, 2)}</span>
+                            <span className='avatar'>{msgUserIp === userIp ? 'ME' : displayName?.substr(0, 2)}</span>
                             <span className='text'>{text}</span>
                             <span className='timestamp'>{new Date(createdAt).toLocaleString()}</span>
                           </div>
