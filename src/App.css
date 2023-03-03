@@ -4,8 +4,8 @@
 
 .App {
   text-align: center;
-  width: 500px;
-  margin: 50px auto;
+  min-width: 300px;
+  margin: 0 auto;
 }
 
 .messages-container {
@@ -13,7 +13,7 @@
   padding: 10px;
   box-shadow: 0 8px 12px rgb(9 30 66 / 15%), 0 0 1px rgb(9 30 66 / 31%);
   min-height: 100px;
-  max-height: 400px;
+  max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
 }
